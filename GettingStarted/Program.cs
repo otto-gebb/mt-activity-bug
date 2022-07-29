@@ -56,10 +56,7 @@ namespace GettingStarted
             globalActivity = new Activity("global");
             globalActivity.Start();
 
-            var host = CreateHostBuilder(args).Build();
-            var bus = host.Services.GetRequiredService<IBusControl>();
-            bus.Start();
-            host.Run();
+            CreateHostBuilder(args).Build().Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
