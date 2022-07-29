@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk.Worker">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <UserSecretsId>dotnet-GettingStarted-3E162B96-73F8-4A27-B944-554C241030D4</UserSecretsId>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MassTransit" Version="7.3.0" />
+    <PackageReference Include="MassTransit.Extensions.DependencyInjection" Version="7.3.0" />
+    <PackageReference Include="MassTransit.Quartz" Version="7.3.0" />
+    <PackageReference Include="MassTransit.RabbitMQ" Version="7.3.0" />
+    <PackageReference Include="Microsoft.Extensions.Hosting" Version="5.0.0" />
+    <PackageReference Include="Serilog" Version="2.11.0" />
+    <PackageReference Include="Serilog.Extensions.Hosting" Version="5.0.1" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="4.0.1" />
+  </ItemGroup>
+</Project>
