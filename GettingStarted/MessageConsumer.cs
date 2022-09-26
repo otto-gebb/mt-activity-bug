@@ -25,7 +25,6 @@ namespace GettingStarted
         {
             bool isCurrentActivityGlobal = Program.globalActivity == Activity.Current;
             var baggage = string.Join(';', Activity.Current.Baggage.Select(x => $"{x.Key}, {x.Value}"));
-            _logger.LogInformation("Received Text: {Text}", context.Message.Text);
             _logger.LogInformation($"inGlobalActivity: {isCurrentActivityGlobal}, baggage: {baggage}");
             return Task.CompletedTask;
         }

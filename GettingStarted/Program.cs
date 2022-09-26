@@ -51,12 +51,26 @@ namespace GettingStarted
         public static Activity globalActivity;
         public static void Main(string[] args)
         {
-            DiagnosticListener.AllListeners.Subscribe(new DummyDiagnosticListenerObserver());
+            
 
             globalActivity = new Activity("global");
             globalActivity.Start();
+            Console.WriteLine($"Root activity: {globalActivity.Id}");
 
-            CreateHostBuilder(args).Build().Run();
+            IHost host = CreateHostBuilder(args).Build();
+
+            // This worked in v7, but no longer works in v8.
+            // DiagnosticListener.AllListeners.Subscribe(new DummyDiagnosticListenerObserver());
+            // This enables child activity creation in MT v8.
+            using var listener = new ActivityListener
+            {
+                ShouldListenTo = _ => true,
+                Sample = (ref ActivityCreationOptions<ActivityContext> _) => ActivitySamplingResult.AllData,
+                ActivityStarted = activity => {},
+                ActivityStopped = activity => {}
+            };
+            ActivitySource.AddActivityListener(listener);
+            host.Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>
@@ -66,9 +80,10 @@ namespace GettingStarted
                     services.AddMassTransit(x =>
                     {
                         x.AddConsumer<MessageConsumer>();
-
-                        x.UsingRabbitMq((context,cfg) =>
+                        x.UsingRabbitMq((context, cfg) =>
                         {
+                            cfg.UseNewtonsoftJsonSerializer();
+                            cfg.UseNewtonsoftJsonDeserializer();
                             cfg.ConfigureEndpoints(context);
                         });
                     });

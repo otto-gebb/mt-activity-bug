@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using MassTransit;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using System.Diagnostics;
 
 namespace GettingStarted
 {
@@ -32,8 +33,12 @@ namespace GettingStarted
             _logger.LogInformation("Worker starting.");
             while (!stoppingToken.IsCancellationRequested)
             {
+                
+                Activity sendActivity = new Activity("Worker send");
+                sendActivity.Start();
+                sendActivity.AddBaggage("SessionId", Guid.NewGuid().ToString());
                 await _bus.Publish(new Message { Text = $"The time is {DateTimeOffset.Now}" }, stoppingToken);
-
+                sendActivity.Stop();
                 await Task.Delay(1000, stoppingToken);
             }
             _logger.LogInformation("Worker stopped.");
